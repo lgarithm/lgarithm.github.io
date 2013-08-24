@@ -1,0 +1,28 @@
+
+\documentclass{article}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\newtheorem*{thm}{Theorem}
+\newtheorem*{cly}{Corollary}
+\newtheorem*{prf}{Proof}
+\newtheorem*{define}{Definition}
+\newcommand{\floor}[1]{\lfloor {#1} \rfloor}
+
+\begin{document}
+
+\begin{thm}
+For each integer $n > 1$, there exist a constant integer $d$, 
+such that $$a^{k + \phi(n)} \equiv a^k \pmod n$$ for any $a \in \mathbb Z$
+and $k \geq d$.
+\end{thm}
+
+\begin{prf}
+Let $n = \prod_{i=1}^r p_i^{e_i}$ be the factorization of $n$ into primes, 
+take $d = \max \{e_i\}$.
+For each $p_i$, we need to show that $p_i^{e_i} \vert a^k(a^{\phi(n)} - 1)$.
+Let $q_i = p_i^{e_i}$, when $(a, p) = 1$, we have $(a, q_i) = 1$, 
+$a^{\phi(q_i)} = 1 \pmod {q_i}$, therefore $a^{\phi(n)} = 1 \pmod {q_i}$. 
+Otherwise, $a = a_1 p$, then $p_i^{e_i} \vert a^k$ since $k \geq e_i$.
+\end{prf}
+
+\end{document}
