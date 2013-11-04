@@ -32,7 +32,7 @@ every finite abelian group can be embeded into such a group for some integer n.
 Assume that abelian group G has cyclic decomposition $\bigoplus C\_i$,
 we pick up distinct prime numbers $p\_i$ such that $|C\_i| \vert p\_i - 1$,
 then there is an embeding $C\_i \to \mathbb Z/p\mathbb Z$.
-The existence of $p\_i$ is granted by the Dirchlet theorem on arithmetic progress.
+The existence of $p\_i$ is granted by the Dirichlet theorem on arithmetic progress.
 
 How every, there is not aways an embeding of $(\mathbb Z/n\mathbb Z)^\ast$ into the unit circle $S^1$,
 which means not all abelian group admits a faithful one-dimensional representation.
