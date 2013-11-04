@@ -14,7 +14,7 @@ For $(m, n) = 1$, we have
 $(\mathbb Z/mn\mathbb Z)^\ast \cong (\mathbb Z/m\mathbb Z)^\ast \oplus (\mathbb Z/n\mathbb Z)^\ast$
 The isomorphism is explicitly given by
 $$a \to ([a]\_m, [a]\_n)$$
-$$([x]\_m, [y]\_n) \to [n[n^{-1}]\_m x + m[m^{-1}]\_n y]\_{mn}$$
+$$([x]\_m, [y]\_n) \to [n[n]^{-1}\_m x + m[m]^{-1}\_n y]\_{mn}$$
 where $[a]\_n$ is the image of a in the homomorhpism $\mathbb Z \to \mathbb Z/n \mathbb Z$.
 
 When $n$ has primitive roots, the this group becomes a cyclic group.
