@@ -2,7 +2,7 @@
 layout: post
 ---
 
-Let $R$ a ring.
+Let $R$ be a ring.
 
 ## Semi-group Algebra
 
