@@ -16,64 +16,75 @@ function next_state(last, near) {
     return true;
 }
 
-function Board(width, height) {
-    this.width = width;
-    this.height = height;
-    this.board = new_board(this.width, this.height);
-
-    this.next = function() {
-	var dx = [-1, 0, 1, 0, -1, 1, -1, 1];
-	var dy = [0, -1, 0, 1, -1, 1, 1, -1];
-
-	var tmp = new_board(this.width, this.height);
-	var change = 0;
-
-	for (var i=0; i < this.height; ++i) {
-	    for (var j=0; j < this.width; ++j) {
-		var c = 0;
-		for (var k=0; k < 8; ++k) {
-		    var x = i + dx[k];
-		    var y = j + dy[k];
-		    if (0 <= x && x < width && 0 <= y && y < this.height) {
-			if (this.board[x][y]) {
-			    ++c;
-			}
-		    }
-		}
-
-		tmp[i][j] = next_state(this.board[i][j], c);
-		if (tmp[i][j] != this.board[i][j]) {
-		    ++change;
-		}
-	    }
-	}
-
-	this.board = tmp;
-	return change;
-    }
-
-    this.print = function() {
-	for (var i=0; i < this.width; ++i) {
-	    var line = this.board[i].map(function(b){
-		return b ? '#' : '.';
-	    }).join(' ');
-	    console.log(line);
-	}
-    }
-
-    this.init = function() {
-	for (var i=9; i < 12; ++i) {
-	    for (var j=9; j < 12; ++j) {
-		this.board[i][j] = true;
-	    }
+function for2d(width, height, f) {
+    for (var i=0; i < height; ++i) {
+	for (var j=0; j < width; ++j) {
+	    f(i, j);
 	}
     }
 }
 
+function for_neighbour8(i, j, width, height, f) {
+    const dx = [-1, 0, 1, 0, -1, 1, -1, 1];
+    const dy = [0, -1, 0, 1, -1, 1, 1, -1];
+    for (var k=0; k < 8; ++k) {
+	var x = i + dx[k];
+	var y = j + dy[k];
+	if (0 <= x && x < width && 0 <= y && y < height) {
+	    f(x, y);
+	}
+    }
+}
+
+function Board(width, height) {
+    return {
+	board: new_board(width, height),
+	next: function() {
+	    var board = this.board;
+	    const dx = [-1, 0, 1, 0, -1, 1, -1, 1];
+	    const dy = [0, -1, 0, 1, -1, 1, 1, -1];
+	    var tmp = new_board(width, height);
+	    var change = 0;
+	    for2d(width, height, function(i, j){
+		var c = 0;
+		for_neighbour8(i, j, width, height, function(x, y){
+		    if (board[x][y]) {
+			++c;
+		    }
+		});
+		tmp[i][j] = next_state(board[i][j], c);
+		if (tmp[i][j] != board[i][j]) {
+		    ++change;
+		}
+	    });
+
+	    this.board = tmp;
+	    return change;
+	},
+
+	init: function() {
+	    var board = this.board;
+	    for (var i=9; i < 12; ++i) {
+		for (var j=9; j < 12; ++j) {
+		    board[i][j] = true;
+		}
+	    }
+	},
+
+	rand_init: function() {
+	    var board = this.board;
+	    var p = 0.2;
+	    for2d(width, height, function(i, j) {
+		board[i][j] = Math.random() < p;
+	    });
+	},
+    }
+}
+
 function Life32(width, height) {
-    var b = new Board(width, height);
+    var b = Board(width, height);
+    //b.rand_init();
     b.init();
-    //b.print();
 
     var z_index = 0;
     var o = [-10, -10, z_index];
@@ -109,7 +120,6 @@ function Life32(width, height) {
 		else {
 		    c = c2;
 		}
-		//colors = add(colors, [c1, c1, c1, c2, c2, c2]);
 		colors = add(colors, [c, c, c, c, c, c]);
 		vec3.add(p1, p1, dy);
 	    }
@@ -150,6 +160,10 @@ function update() {
 }
 
 function init_life32() {
-    var game = new Life32(21, 21);
+    g_view.ortho_mode = true;
+    logger.info = function(){};
+    var width = 21;
+    var height = 21;
+    var game = new Life32(width, height);
     g_game = game;
 }

@@ -93,36 +93,32 @@ function initGLCanvas(canvas_id) {
 	gl.uniformMatrix4fv(gl.shaderProgram.pMatrixUniform, false, gl.pMatrix);
     }
 
-    gl.enable(gl.BLEND);
+    //gl.enable(gl.BLEND);
     gl.enable(gl.DEPTH_TEST);
+    //gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
     gl.clearColor(0.0, 0.0, 0.0, 0.5);
     return gl;
 }
 
-function create_vertex_buffer(gl, vertices) {
+function create_buffer(gl, points, size) {
     var merged = [];
-    merged = merged.concat.apply(merged, vertices);
+    merged = merged.concat.apply(merged, points);
 
     var buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(merged), gl.STATIC_DRAW);
 
-    buffer.itemSize = 3;
-    buffer.numItems = vertices.length;
+    buffer.itemSize = size;
+    buffer.numItems = points.length;
     return buffer;
 }
 
+function create_vertex_buffer(gl, vertices) {
+    return create_buffer(gl, vertices, 3);
+}
+
 function create_color_buffer(gl, colors) {
-    var merged = [];
-    merged = merged.concat.apply(merged, colors);
-
-    var buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(merged), gl.STATIC_DRAW);
-
-    buffer.itemSize = 4;
-    buffer.numItems = colors.length;
-    return buffer;
+    return create_buffer(gl, colors, 4);
 }
 
 function create_single_color_buffer(gl, color, n) {
@@ -178,6 +174,10 @@ function display(gl) {
     gl.models.map(function(m){draw_model(gl, m);});
 }
 
+function GLContext(){
+
+}
+
 var g_gl;
 var g_viewer;
 
@@ -191,5 +191,9 @@ function webGLStart() {
 
     g_viewer = gl.viewer;
     g_gl = gl;
+    g_gl.display();
+}
+
+function update() {
     g_gl.display();
 }
