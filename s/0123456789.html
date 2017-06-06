@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>0123456789</title>
+    <style>
+        div#container {
+            width: 1200px;
+            height: 400px;
+        }
+    </style>
+    <script>
+        let drawSegment = (c, x, y, R, r, ro) => {
+            c.translate(x, y);
+            if (ro) { c.rotate(Math.PI * 0.5) }
+            c.beginPath();
+            c.moveTo(0, R);
+            c.lineTo(-r, R - r);
+            c.lineTo(-r, r - R);
+            c.lineTo(0, -R);
+            c.lineTo(r, r - R);
+            c.lineTo(r, R - r)
+            c.closePath();
+            c.fill();
+            if (ro) { c.rotate(-Math.PI * 0.5) }
+            c.translate(-x, -y);
+        }
+
+        let drawDigit = (ctx, x, y, L, R, r, n) => {
+            let a = () => { drawSegment(ctx, -L, -L, R, r) }
+            let b = () => { drawSegment(ctx, -L, L, R, r); }
+            let c = () => { drawSegment(ctx, L, L, R, r); }
+            let d = () => { drawSegment(ctx, L, -L, R, r); }
+            let e = () => { drawSegment(ctx, 0, -2 * L, R, r, true); }
+            let f = () => { drawSegment(ctx, 0, 0, R, r, true); };
+            let g = () => { drawSegment(ctx, 0, 2 * L, R, r, true); }
+            let digits = {
+                0: [a, b, c, d, e, g],
+                1: [c, d],
+                2: [b, d, e, f, g],
+                3: [c, d, e, f, g],
+                4: [a, c, d, f],
+                5: [a, c, e, f, g],
+                6: [a, b, c, e, f, g],
+                7: [c, d, e],
+                8: [a, b, c, d, e, f, g],
+                9: [a, c, d, e, f, g],
+            };
+            ctx.translate(x, y);
+            for (let z of digits[n]) {
+                z();
+            }
+            ctx.translate(-x, -y);
+        }
+
+        let drawDigits = (ctx, x, y, L, l, R, r, ds) => {
+            for (let i in ds) {
+                drawDigit(ctx, x + i * (2 * L + l), y, L, R, r, ds[i]);
+            }
+        }
+
+        window.onload = () => {
+            let container = document.getElementById('container');
+            let canvas = document.getElementById('c');
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            let ctx = canvas.getContext('2d');
+            let l = 16;
+            let L = 32;
+            let R = 30;
+            let r = 3;
+            let x = 100;
+            let y = 100;
+            drawDigits(ctx, x, y, L, l, R, r, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        }
+    </script>
+</head>
+
+<body>
+    <div id="container">
+        <canvas id="c"></canvas>
+    </div>
+</body>
+
+</html>
